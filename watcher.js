@@ -4,7 +4,7 @@ import path from 'path';
 import sass from 'node-sass';
 
 module.exports = {
-  watcher(socket) {
+  watchYourSass(socket) {
     const watcher = chokidar.watch('../../../../../.styles', {
       persistent: true,
     });
@@ -13,10 +13,10 @@ module.exports = {
     const log = console.log.bind(console);
     // Add event listeners.
     watcher
-      .on('add', filePath => this.sassIt(filePath, socket))
+      .on('add', filePath => this.sassMeUp(filePath, socket))
       .on(
         'change',
-        filePath => this.sassIt(filePath, socket) && log(`File ${filePath} has been changed`),
+        filePath => this.sassMeUp(filePath, socket) && log(`File ${filePath} has been changed`),
       )
       .on('unlink', filePath => log(`File ${filePath} has been removed`));
 
@@ -30,7 +30,7 @@ module.exports = {
         log('Raw event info:', event, filePath, details);
       });
   },
-  sassIt(file, socket) {
+  sassMeUp(file, socket) {
     sass.render(
       {
         file,

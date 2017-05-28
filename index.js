@@ -10,7 +10,7 @@ const w = require('./watcher');
 // create a namespaced socket
 io.of('/hotSocket').on('connection', (socket) => {
   console.log('a user connected');
-  w.watcher(socket);
+  w.watchYourSass(socket);
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
