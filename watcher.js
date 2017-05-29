@@ -1,7 +1,7 @@
 import chokidar from 'chokidar';
-import fs from 'fs';
-import path from 'path';
 import sass from 'node-sass';
+import autoprefixer from 'autoprefixer';
+import postcss from 'postcss';
 
 module.exports = {
   watchYourSass(socket) {
@@ -11,26 +11,18 @@ module.exports = {
 
     // Something to use when events are received.
     const log = console.log.bind(console);
-    // Add event listeners.
+    // Event listeners. Only utilizing add & change but others are kept for notifications
     watcher
-      .on('add', filePath => this.sassMeUp(filePath, socket))
-      .on(
-        'change',
-        filePath => this.sassMeUp(filePath, socket) && log(`File ${filePath} has been changed`),
-      )
-      .on('unlink', filePath => log(`File ${filePath} has been removed`));
-
-    // More possible events.
-    watcher
+      .on('add', filePath => this.sassMeUp(filePath, socket, 'added'))
+      .on('change', filePath => this.sassMeUp(filePath, socket, 'modified'))
+      .on('unlink', filePath => log(`File ${filePath} has been removed`))
       .on('addDir', filePath => log(`Directory ${filePath} has been added`))
       .on('unlinkDir', filePath => log(`Directory ${filePath} has been removed`))
       .on('error', error => log(`Watcher error: ${error}`))
-      .on('ready', () => log('Initial scan complete. Ready for changes'))
-      .on('raw', (event, filePath, details) => {
-        log('Raw event info:', event, filePath, details);
-      });
+      .on('ready', () => log('Initial scan complete. Ready for changes'));
   },
-  sassMeUp(file, socket) {
+  sassMeUp(file, socket, type) {
+    console.log(`${file} has been ${type}`);
     sass.render(
       {
         file,
@@ -39,7 +31,15 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
-          socket.emit('file refresh', { css: result.css.toString(), filename: result.stats.entry });
+          postcss([autoprefixer]).process(result.css.toString()).then((postResult) => {
+            postResult.warnings().forEach((warn) => {
+              console.warn(warn.toString());
+            });
+            socket.emit('file refresh', {
+              css: postResult.css.toString(),
+              filename: result.stats.entry,
+            });
+          });
         }
       },
     );

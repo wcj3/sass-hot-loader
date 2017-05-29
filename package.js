@@ -3,18 +3,19 @@ Npm.depends({
   'socket.io': '2.0.1',
   'node-sass': '4.5.3',
   'chokidar': '1.7.0',
+  'autoprefixer': '7.1.1',
+  'postcss': '6.0.1',
 });
 
 Package.describe({
   name: 'wcj3:sass-hot-loader',
-  version: '0.0.1-beta',
+  version: '1.0.0-beta',
   // Brief, one-line summary of the package.
-  summary: '',
+  summary: 'A hot-loader for your sass files',
   // URL to the Git repository containing the source code for this package.
-  git: '',
+  git: 'https://github.com/wcj3/sass-hot-loader',
   // By default, Meteor will default to using README.md for documentation.
   // To avoid submitting documentation, set this field to null.
-  documentation: 'README.md',
   debugOnly: true,
 });
 

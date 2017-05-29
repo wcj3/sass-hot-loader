@@ -32,6 +32,7 @@ async function connectToSocket() {
 
 connectToSocket().then((socket) => {
   socket.on('file refresh', (msg) => {
+    // truthy is ID is already present in DOM and removes node from DOM
     if (document.getElementById(msg.filename)) {
       console.log(`removing ${msg.filename} and swapping with replacement`);
       const rm = document.getElementById(msg.filename);
