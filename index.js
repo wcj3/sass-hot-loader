@@ -1,8 +1,8 @@
 import express from 'express';
 import ioPackage from 'socket.io';
-
+import httpPackage from 'http';
 const app = express();
-const http = require('http').Server(app);
+const http = httpPackage.Server(app);
 const io = ioPackage(http);
 const w = require('./watcher');
 
@@ -19,5 +19,5 @@ io.of('/hotSocket').on('connection', (socket) => {
 
 // listen on port 1992
 http.listen(1992, () => {
-  console.log('hot-reload-css starting...');
+  console.log('sass-hot-loader starting...');
 });

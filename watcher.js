@@ -1,7 +1,7 @@
 import chokidar from 'chokidar';
-import fs from 'fs';
-import path from 'path';
 import sass from 'node-sass';
+import autoprefixer from 'autoprefixer';
+import postcss from 'postcss';
 
 module.exports = {
   watchYourSass(socket) {
@@ -39,7 +39,15 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
-          socket.emit('file refresh', { css: result.css.toString(), filename: result.stats.entry });
+          postcss([autoprefixer]).process(result.css.toString()).then((postResult) => {
+            postResult.warnings().forEach((warn) => {
+              console.warn(warn.toString());
+            });
+            socket.emit('file refresh', {
+              css: postResult.css.toString(),
+              filename: result.stats.entry,
+            });
+          });
         }
       },
     );
