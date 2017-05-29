@@ -8,23 +8,25 @@ module.exports = {
     const watcher = chokidar.watch('../../../../../.styles', {
       persistent: true,
     });
+
     // Something to use when events are received.
-    // Event listeners. Only utilizing add & change but others are kept
-    // for notifications
+    const log = console.log.bind(console);
+    // Event listeners. Only utilizing add & change but others are kept for notifications
     watcher
       .on('add', filePath => this.sassMeUp(filePath, socket))
       .on(
         'change',
-        filePath => this.sassMeUp(filePath, socket) && console.log(`File ${filePath} has been changed`),
+        filePath => this.sassMeUp(filePath, socket))
       )
-      .on('unlink', filePath => console.log(`File ${filePath} has been removed`));
+      .on('unlink', filePath => log(`File ${filePath} has been removed`));
     watcher
-      .on('addDir', filePath => console.log(`Directory ${filePath} has been added`))
-      .on('unlinkDir', filePath => console.log(`Directory ${filePath} has been removed`))
-      .on('error', error => console.log(`Watcher error: ${error}`))
-      .on('ready', () => console.log('Initial scan complete. Ready for changes'))
+      .on('addDir', filePath => log(`Directory ${filePath} has been added`))
+      .on('unlinkDir', filePath => log(`Directory ${filePath} has been removed`))
+      .on('error', error => log(`Watcher error: ${error}`))
+      .on('ready', () => log('Initial scan complete. Ready for changes'))
   },
   sassMeUp(file, socket) {
+    console.log(`${file} has been modified`);
     sass.render(
       {
         file,
@@ -33,7 +35,6 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
-          // Process with Postcss & autoprefixer, send response via Socket
           postcss([autoprefixer]).process(result.css.toString()).then((postResult) => {
             postResult.warnings().forEach((warn) => {
               console.warn(warn.toString());
