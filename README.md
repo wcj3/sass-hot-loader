@@ -41,8 +41,8 @@ gulp.task('minify-sass', () => {
 ```
 ### HTML
 ```html
-  <!-- MAKE SURE TO COMMENT THIS OUT DURING DEVELOPMENT-->
-  <link rel="stylesheet" href="bundle.min.css">
+  <!-- This will get ignored during development -->
+  <link rel="stylesheet" href="bundle.min.css" id="shl-prod-bundle">
 ```
 
 
