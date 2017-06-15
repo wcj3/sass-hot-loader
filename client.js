@@ -1,9 +1,16 @@
-// io is return by the src and will be available globally
+// io is returned by the src and will be available globally
 (() => {
   const script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = 'http://localhost:1992/socket.io/socket.io.js';
-  document.getElementsByTagName('head')[0].appendChild(script);
+  document.head.appendChild(script);
+})();
+
+
+// Strip generated bundle from dom in development
+(() => {
+  const shlBundle = document.getElementById('shl-prod-bundle');
+  document.head.removeChild(shlBundle);
 })();
 
 function resolveSocketIo() {
@@ -17,6 +24,7 @@ function resolveSocketIo() {
           resolve(socket);
         }
       } catch (e) {
+        console.log('error caught')
         console.log(e);
       }
     };
