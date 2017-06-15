@@ -9,7 +9,7 @@ Npm.depends({
 
 Package.describe({
   name: 'wcj3:sass-hot-loader',
-  version: '1.0.0-beta',
+  version: '2.0.0-beta',
   // Brief, one-line summary of the package.
   summary: 'A hot-loader for your sass files',
   // URL to the Git repository containing the source code for this package.
@@ -29,6 +29,6 @@ Package.onUse((api) => {
 Package.onTest((api) => {
   api.use('ecmascript');
   api.use('tinytest');
-  api.use('hot-reload-css');
+  api.use('wcj3:sass-hot-loader');
   api.mainModule('sass-hot-loader-tests.js');
 });
